@@ -1,7 +1,7 @@
 {
   "name": "calculater",
   "version": "0.1.0",
-  "homepage": "https://tankdhavaltc.github.io/calculater",
+  "homepage": "https://tankdhavaltc.github.io/calculator",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.0",

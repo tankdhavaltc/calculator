@@ -1,5 +1,5 @@
 import { Box, Button, Card, Stack, Typography, } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import BackspaceIcon from '@mui/icons-material/Backspace';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -104,7 +104,13 @@ const Calculater = () => {
             case "÷":
                 result = previousNumber / currentNumber;
                 break;
+            case "/":
+                result = previousNumber / currentNumber;
+                break;
             case "x":
+                result = previousNumber * currentNumber;
+                break;
+            case "*":
                 result = previousNumber * currentNumber;
                 break;
             case "+":
@@ -119,6 +125,25 @@ const Calculater = () => {
         return result;
     };
 
+    useEffect(() => {
+        const handleKeyPress = (e) => {
+            console.log("TCL: handleKeyPress -> e.key", e.key)
+            if ((e.code.includes("Digit") || e.code.includes("Numpad")) && !e.code.includes("NumpadEnter")) {
+                if (e.key === "+" || e.key === "-" || e.key === "/" || e.key === "*") {
+                    // chooseOperationHandler(e.key);
+                } else {
+                    // appendValueHandler(e.key);
+                }
+            } else if (e.code.includes("Enter")) {
+            } else if (e.code.includes("Delete")) {
+                allclearHandler()
+            }
+        }
+        window.addEventListener('keypress', handleKeyPress);
+        return () => {
+            window.removeEventListener('keypress', handleKeyPress);
+        }
+    }, [])
     return (
         <Box className={classes.mainBox}>
             <Stack direction={"row"} justifyContent={"center"} alignItems={"center"}>

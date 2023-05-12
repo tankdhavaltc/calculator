@@ -104,7 +104,9 @@ const Calculater = () => {
             default:
                 return;
         }
-        return result.toFixed(4);;
+        if (result.toString().includes("."))
+            return result.toFixed(4);
+        return result;
     }, [current, operations, prevoius]);
 
     const chooseOperationHandler = useCallback((operation) => {

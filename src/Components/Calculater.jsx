@@ -1,5 +1,5 @@
 import { Box, Button, Card, Stack, Typography, } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import BackspaceIcon from '@mui/icons-material/Backspace';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -33,10 +33,12 @@ const Calculater = () => {
         previousText: {
             textAlign: "end",
             fontSize: "25px!important",
+            display: "list-item"
         },
         currentText: {
             textAlign: "end",
             fontSize: "40px!important",
+            display: "list-item"
         },
         screen: {
             backgroundColor: "#1976d2ab",
@@ -60,14 +62,14 @@ const Calculater = () => {
 
     const classes = useStyles();
 
-    const appendValueHandler = (value) => {
+    const appendValueHandler = useCallback((value) => {
         if (value === "." && current.includes(".")) return;
-        setCurrent(current + value);
-    };
+        setCurrent(prev => prev + value);
+    }, [current]);
 
-    const deleteHandler = () => {
+    const deleteHandler = useCallback(() => {
         setCurrent(String(current).slice(0, -1));
-    };
+    }, [current]);
 
     const allclearHandler = () => {
         setCurrent("");
@@ -75,27 +77,7 @@ const Calculater = () => {
         setPrevoius("");
     };
 
-    const chooseOperationHandler = (operation) => {
-        if (current === "") return;
-        if (prevoius !== "") {
-            let value = calculate();
-            setPrevoius(value);
-        } else {
-            setPrevoius(current);
-        }
-        setCurrent("");
-        setOperations(operation);
-    };
-
-    const equalHandler = () => {
-        let value = calculate();
-        if (value === undefined || value == null) return;
-        setCurrent(value);
-        setPrevoius("");
-        setOperations("");
-    };
-
-    const calculate = () => {
+    const calculate = useCallback(() => {
         let result;
         let previousNumber = parseFloat(prevoius);
         let currentNumber = parseFloat(current);
@@ -122,19 +104,39 @@ const Calculater = () => {
             default:
                 return;
         }
-        return result;
-    };
+        return result.toFixed(4);;
+    }, [current, operations, prevoius]);
+
+    const chooseOperationHandler = useCallback((operation) => {
+        if (current === "") return;
+        if (prevoius !== "") {
+            let value = calculate();
+            setPrevoius(value);
+        } else {
+            setPrevoius(current);
+        }
+        setCurrent("");
+        setOperations(operation);
+    }, [calculate, current, prevoius]);
+
+    const equalHandler = useCallback(() => {
+        let value = calculate();
+        if (value === undefined || value == null) return;
+        setCurrent(value);
+        setPrevoius("");
+        setOperations("");
+    }, [calculate]);
 
     useEffect(() => {
         const handleKeyPress = (e) => {
-            console.log("TCL: handleKeyPress -> e.key", e.key)
-            if ((e.code.includes("Digit") || e.code.includes("Numpad")) && !e.code.includes("NumpadEnter")) {
+            if ((e.code.includes("Digit") || e.code.includes("Numpad")) && e.code !== "NumpadEnter") {
                 if (e.key === "+" || e.key === "-" || e.key === "/" || e.key === "*") {
-                    // chooseOperationHandler(e.key);
+                    chooseOperationHandler(e.key);
                 } else {
-                    // appendValueHandler(e.key);
+                    appendValueHandler(e.key);
                 }
             } else if (e.code.includes("Enter")) {
+                equalHandler()
             } else if (e.code.includes("Delete")) {
                 allclearHandler()
             }
@@ -143,12 +145,13 @@ const Calculater = () => {
         return () => {
             window.removeEventListener('keypress', handleKeyPress);
         }
-    }, [])
+    }, [appendValueHandler, chooseOperationHandler, equalHandler])
+
     return (
         <Box className={classes.mainBox}>
             <Stack direction={"row"} justifyContent={"center"} alignItems={"center"}>
                 <Card className={classes.card}>
-                    <Typography className={classes.title}>Calculater</Typography>
+                    <Typography className={classes.title}>Calculator</Typography>
                     <Box className={classes.screen}>
                         <Typography className={classes.previousText}>{prevoius} {operations}</Typography>
                         <Typography className={classes.currentText}>{current}</Typography>

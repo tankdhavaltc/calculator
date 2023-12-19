@@ -191,7 +191,7 @@ const Calculater = () => {
                 </Card>
             </Stack>
             <Stack justifyContent={"center"} alignContent={"center"} alignItems={"center"} style={{ marginTop: "10px" }}>
-                <Typography>Calculator v3.0</Typography>
+                <Typography>Calculator v4.0</Typography>
             </Stack>
         </Box>
     )

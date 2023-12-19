@@ -153,7 +153,7 @@ const Calculater = () => {
         <Box className={classes.mainBox}>
             <Stack direction={"row"} justifyContent={"center"} alignItems={"center"}>
                 <Card className={classes.card}>
-                    <Typography className={classes.title}>Calculator 2.0</Typography>
+                    <Typography className={classes.title}>Calculator</Typography>
                     <Box className={classes.screen}>
                         <Typography className={classes.previousText}>{prevoius} {operations}</Typography>
                         <Typography className={classes.currentText}>{current}</Typography>
@@ -190,7 +190,10 @@ const Calculater = () => {
                     </Box>
                 </Card>
             </Stack>
-        </Box >
+            <Stack justifyContent={"center"} alignContent={"center"} alignItems={"center"} style={{ marginTop: "10px" }}>
+                <Typography>Calculator v2.0</Typography>
+            </Stack>
+        </Box>
     )
 }
 

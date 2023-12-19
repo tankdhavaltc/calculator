@@ -153,7 +153,7 @@ const Calculater = () => {
         <Box className={classes.mainBox}>
             <Stack direction={"row"} justifyContent={"center"} alignItems={"center"}>
                 <Card className={classes.card}>
-                    <Typography className={classes.title}>Calculator</Typography>
+                    <Typography className={classes.title}>Calculator 2.0</Typography>
                     <Box className={classes.screen}>
                         <Typography className={classes.previousText}>{prevoius} {operations}</Typography>
                         <Typography className={classes.currentText}>{current}</Typography>
